@@ -1,0 +1,57 @@
+<% layout("/layout/boilerplate") %>
+
+
+<body>
+    
+
+
+
+    <form action="/login/<%= data._id %>?_method=PUT" method="post">
+        
+        <div class="row">
+            <div class="col-8 offset-2">
+                
+                <h1>plz update your details !</h1>
+
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input type="text" class="form-control" id="title" value="<%= data.title %>"  name="data[title]">
+        
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">description</label>
+          <textarea  class="form-control" id="description" name="data[description]"> <%= data.description %></textarea>
+        </div>
+        
+        <div class="mb-3">
+          <label for="image" class="form-label">Image</label>
+          <textarea type="text" class="form-control" id="image" placeholder="" name="data[image]"><%= data.image %></textarea>
+        </div>
+
+        <div class="row">
+
+            <div class="mb-3 col-md-4">
+                <label for="country" class="form-label">country</label>
+                <input type="text" class="form-control" id="country" value="<%= data.country %>" name="data[country]">
+              </div>
+             
+              <div class="mb-3 col-md-8">
+                <label for="price" class="form-label">price</label>
+                <input type="number" class="form-control" id="price"value="<%= data.price %>"  name="data[price]">
+              </div>
+
+        </div>
+        
+          <div class="mb-3">
+            <label for="place" class="form-label">Place</label>
+            <input type="text" class="form-control" id="place" value="<%= data.location %>" name="data[location]">
+          </div>
+        <button type="submit" class="btn add-btn btn-dark">Change</button>
+    </div>
+</div>
+      </form>
+
+   
+
+    
+</body>
