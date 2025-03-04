@@ -6,45 +6,65 @@
 
 
 
-    <form action="/login/<%= data._id %>?_method=PUT" method="post">
+    <form action="/login/<%= data._id %>?_method=PUT" method="post" novalidate class="needs-validation" enctype="multipart/form-data">
         
         <div class="row">
             <div class="col-8 offset-2">
                 
-                <h1>plz update your details !</h1>
+                <h1>Update your details !</h1>
 
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
-          <input type="text" class="form-control" id="title" value="<%= data.title %>"  name="data[title]">
-        
+          <input type="text" class="form-control" id="title" value="<%= data.title %>"  name="data[title]" required>
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            Please Enter this Field !
+          </div>
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">description</label>
-          <textarea  class="form-control" id="description" name="data[description]"> <%= data.description %></textarea>
+          <textarea  class="form-control" id="description" name="data[description]" required><%= data.description %></textarea>
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            Please Enter this Field !
+          </div>
         </div>
         
         <div class="mb-3">
-          <label for="image" class="form-label">Image</label>
-          <textarea type="text" class="form-control" id="image" placeholder="" name="data[image]"><%= data.image %></textarea>
+          <label for="image" class="form-label">Upload New Image</label>
+          <input type="file" class="form-control"   name="data[image]"></input>
         </div>
 
         <div class="row">
 
             <div class="mb-3 col-md-4">
                 <label for="country" class="form-label">country</label>
-                <input type="text" class="form-control" id="country" value="<%= data.country %>" name="data[country]">
+                <input type="text" class="form-control" id="country" value="<%= data.country %>" name="data[country]" required>
+                <div class="invalid-feedback">
+                  Please Enter this Field !
+                </div>
               </div>
              
               <div class="mb-3 col-md-8">
                 <label for="price" class="form-label">price</label>
-                <input type="number" class="form-control" id="price"value="<%= data.price %>"  name="data[price]">
+                <input type="number" class="form-control" id="price"value="<%= data.price %>"  name="data[price]" required>
+                <div class="invalid-feedback">
+                  Please Enter this Field !
+                </div>
               </div>
 
         </div>
         
           <div class="mb-3">
             <label for="place" class="form-label">Place</label>
-            <input type="text" class="form-control" id="place" value="<%= data.location %>" name="data[location]">
+            <input type="text" class="form-control" id="place" value="<%= data.location %>" name="data[location]" required>
+            <div class="invalid-feedback">
+              Please Enter this Field !
+            </div>
           </div>
         <button type="submit" class="btn add-btn btn-dark">Change</button>
     </div>

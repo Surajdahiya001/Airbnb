@@ -5,7 +5,7 @@
 
 
 
-    <form action="/login" method="post" novalidate class="needs-validation">
+    <form action="/login" method="post" novalidate class="needs-validation" enctype="multipart/form-data">
       <div class="row">
         <div class="col-8 offset-2">
           <h2 class="mt-3">create new place</h2>
@@ -35,14 +35,13 @@
           </div>
 
           <div class="mb-3">
-            <label for="image" class="form-label">Image</label>
-            <input type="text" class="form-control" id="image" placeholder="Enter  URL / Image link" name="data[image]">
+            <label for="image" class="form-label">Upload Image</label>
+            <input type="file" class="form-control" id="image" name="data[image]" required>
             <div class="row">
 
               <div class="mb-3 col-md-4">
                 <label for="country" class="form-label">country</label>
-                <input type="text" class="form-control" id="country" placeholder="Enter country" name="data[country] "
-                  required>
+                <input type="text" class="form-control" id="country" placeholder="Enter country" name="data[country]" required>
                   <div class="invalid-feedback">
                     Please Enter this Field !
                   </div>
@@ -74,12 +73,5 @@
 
 
 
-    <!-- <form action="/login" method="post">
-    <input type="text" placeholder="title" name="data[title]"><br>
-    <input type="text" placeholder="enter description" name="data[description]"><br>
-    <input type="text" placeholder="place" name="data[location]"><br>
-    <input type="text" placeholder="country" name="data[country]"><br>
-    <input type="number" placeholder="price" name="data[price]"><br>
-    <button>add</button>
-   </form>  -->
+    
   </body>

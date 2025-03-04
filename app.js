@@ -1,25 +1,50 @@
+if (process.env.NODE_ENV != "production") {
+
+    require("dotenv").config();
+
+}
+// console.log(process.env.SECRET);
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const Model = require("./models/listing.js");
+// const Model = require("./models/listing.js");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-const wrapAsync = require("./utils/wrapAsync.js");
+// const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressErr = require("./utils/ExpressErr.js");
-const { listingSchema, reviewSchema } = require("./schema.js");
-const review = require("./models/review.js");
+// const review = require("./models/review.js");
+const session = require("express-session");
+const MongoStore = require('connect-mongo');
+const flash = require("connect-flash");
+const passport = require("passport");
+const Localstrategy = require("passport-local");
+const user = require("./models/user.js");
+
+
+
+const loginroute = require("./routes/login.js");
+const reviewroute = require("./routes/review.js");
+const userroute = require("./routes/user.js");
+// const { cookie } = require("express/lib/response.js");
+
+// MONGO_URL = 'mongodb://127.0.0.1:27017/wanderlust';
+dbUrl = process.env.ATLASDB_URL;
 
 main()
-.then(() => {
-    console.log("database connected")})
-.catch((err) => {
-    console.log(err)});
+    .then(() => {
+        console.log("database connected")
+    })
+    .catch((err) => {
+        console.log(err)
+    });
 
 async function main() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/wanderlust');}
+    await mongoose.connect(dbUrl);
+}
 
-app.listen(8080,()=>{
+app.listen(8080, () => {
 
     console.log("server working");
 })
@@ -27,157 +52,82 @@ app.listen(8080,()=>{
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-app.use(express.urlencoded ({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public")));
-app.engine("ejs",ejsMate);
+app.engine("ejs", ejsMate);
 
-app.get("/",(req,res)=>{
 
-    res.send("this is root");
+const store = MongoStore.create({
+
+    mongoUrl: dbUrl,
+    crypto: {
+        secret: process.env.SECRET,
+    },
+    touchAfter: 24 * 3600,
+})
+
+const sessionOption = {
+    store,
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+    }
+
+}
+
+store.on(("error"), ()=>{
+
+    console.log("ERROR IN MONGO SESSION STORE", err);
 })
 
 
-// functon of handling review validation
+// app.get("/", (req, res) => {
 
-const validateListing = (req, res, next) =>{
-
-    let {error} = listingSchema.validate(req.body);
-console.log(error);
-
-    if(error){
- 
-     throw new ExpressErr(404, error);
-    } else{
-
-        next();
-    }
-}
-
-// functon of handling review validation 
-
-const validateReview = (req, res, next) =>{
-
-    let {error} = reviewSchema.validate(req.body);
-
-    if(error){
- 
-     throw new ExpressErr(404, error);
-    } else{
-
-        next();
-    }
-}
-
-app.get("/login",wrapAsync(async(req,res)=>
-{
-const alldatas = await Model.find({});
-
-res.render("listing.ejs", { alldatas });
-}))
+//     res.send("this is root");
+// })
 
 
-app.get("/login/new",(req,res)=>{
-res.render("form.ejs");
+
+
+app.use(session(sessionOption));
+app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new Localstrategy(user.authenticate()));
+
+passport.serializeUser(user.serializeUser());
+passport.deserializeUser(user.deserializeUser());
+
+app.use((req, res, next) => {
+
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    res.locals.currUser = req.user;
+    next();
 })
 
-// create route
+app.use("/login", loginroute);
+app.use("/login/:id/reviews", reviewroute);
+app.use("/", userroute);
 
+app.all("*", (req, res, next) => {
 
-app.post("/login", validateListing, wrapAsync(async (req,res)=>
-{
-  
-    // const {title,description,location,country,price} = req.body;
-    let alldata  =  new Model(req.body.data);
-
-
-// console.log(alldata);
-   await alldata.save();
-res.redirect("/login");
-}))
-
-
-// update route 
-
-app.get("/login/:id/edit", validateListing, wrapAsync(async (req,res)=>{
-
-    const {id} = req.params;
-const data = await Model.findById(id);
-    res.render("edit.ejs", { data });
-}))
-
-// edit
-
-app.put("/login/:id", validateListing, wrapAsync(async(req,res)=>{
-    const {id} = req.params;
-   await   Model.findByIdAndUpdate(id, { ...req.body.data})
-   res.redirect(`/login/${ id}`);
-}))
-
-// delete route
-
-app.delete("/login/:id", wrapAsync(async(req,res)=>{
-
-    const {id} = req.params;
-  await  Model.findByIdAndDelete(id);
-res.redirect("/login");
-}))
-
-
-// review rout 
-
-app.post("/login/:id/reviews", validateReview,  wrapAsync(async(req, res) =>{
-
-    let listing = await Model.findById(req.params.id);
-    let newReview = new review(req.body.review);
-    // console.log(newReview);
-    listing.review.push(newReview);
-    
-    await newReview.save();
-    await listing.save();
-    
-res.redirect(`/login/${listing._id}`);
-}))
-
-
-
-// reviews delete route 
-
-app.delete("/login/:id/reviews/:reviewId",validateReview, wrapAsync(async(req, res) =>{
-
-let { id, reviewId } = req.params;
-
-
-await Model.findByIdAndUpdate(id, {$pull : { review : reviewId }});
-await review.findById(reviewId);
-
-res.redirect(`/login/${ id }`);
-
-}))
-
-//show route
-app.get("/login/:id", wrapAsync(async (req,res)=>{
-
-const {id} = req.params;
-const data = await Model.findById(id).populate("review");
-
-// console.log(data);
-res.render("show.ejs",{data});
-}))
-
-
-app.all("*", (req,res, next) =>{
-
-    next( new ExpressErr(404, "Page Not Found !"));
+    next(new ExpressErr(404, "Page Not Found !"));
 })
 
 
 // custom error 
 
-app.use((err, req, res, next) =>{
+app.use((err, req, res, next) => {
 
- let { statusCode =500, message = "Somthing Went Worng !"} = err;
+    let { statusCode = 500, message = "Somthing Went Worng !" } = err;
 
- res.status(statusCode).render("error.ejs", { message });
-// res.status(statusCode).send(message);
+    res.status(statusCode).render("error.ejs", { message });
+
 })
