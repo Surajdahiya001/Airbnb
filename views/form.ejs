@@ -57,13 +57,37 @@
 
             </div>
 
-            <div class="mb-3">
-              <label for="place" class="form-label">Place</label>
-              <input type="text" class="form-control" id="place" placeholder="Enter location" name="data[location]"
-                required>
+            <div class="row">
+
+              <div class="mb-3 col-md-8">
+                <label for="place" class="form-label">Place</label>
+                <input type="text" class="form-control" id="place" placeholder="Enter location" name="data[location]"
+                  required>
                 <div class="invalid-feedback">
                   Please Enter this Field !
                 </div>
+              </div>
+
+              <div class="mb-3 col-md-4">
+                <label for="category" class="form-label">Select Category</label>
+                <select class="form-select" name="data[category]" id="category" aria-label="Default select example">
+                  <option selected>Trending</option>
+                  <option value="Rooms">Rooms</option>
+                  <option value="city">Iconic city</option>
+                  <option value="Mountain">Mountain</option>
+                  <option value="Castle">Castle</option>
+                  <option value="Pools">Amazing Pools</option>
+                  <option value="Camping">Camping</option>
+                  <option value="Farms">Farms</option>
+                  <option value="Arctic">Arctic</option>
+                  <option value="Boats">Boats</option>
+                  <option value="Lakes">Lakes</option>
+                  <option value="New">New</option>
+                </select>
+                <div class="invalid-feedback">
+                  Please Enter this Field !
+                </div>
+              </div>
             </div>
             <button type="submit" class="btn add-btn btn-dark">Add</button>
           </div>

@@ -10,30 +10,67 @@
 
 
                 <h3>Listings details :</h3>
+
                 <div class="card listing-card">
 
                     <img src="<%=data.image.url%>" class="card-img-top show-img" alt="">
                     <div class="card-body">
                         <p class="card-text">Owned by <i>
-                                <%= data.owner.username %>
-                            </i></p>
+                           @ <%= data.owner.username %>
+                        </i></p>
+                        <div class="row">
+                            <div class="show-label col-md-2"><h6>Title :</h6></div>
+                            <p class="card-text col-md-10">
+                                <%= data.title %>
+                            </p>
+                               
+                        </div>
 
-                        <p class="card-text">
-                        <h6>
-                            <%= data.title %>
-                        </h6>
-                        </p>
-                        <p class="card-text">
-                            <%= data.description %>
-                        </p>
-                        <p class="card-text">&#8377;<%= data.price.toLocaleString("en-IN")%>
-                        </p>
-                        <p class="card-text">
-                            <%= data.location %>
-                        </p>
-                        <p class="card-text">
-                            <%= data.country %>
-                        </p>
+                        <div class="row">
+
+                            <div class="show-label col-md-2"><h6>Description :</h6></div>
+                            <p class="card-text col-md-10">
+                                <%= data.description %>
+                            </p>
+                           
+
+                        </div><br>
+                        <div class="row">
+                            <div class="row col-md-6">
+                                <div class="show-label col-md-4"><h6>Price :</h6></div>
+                            <p class="card-text col-md-8">
+                                &#8377;<%= data.price.toLocaleString("en-IN")%>
+                            </p>
+                            </div>
+                            <div class="row col-md-6">
+                                <div class="show-label col-md-4"><h6>Location :</h6></div>
+                                <p class="card-text col-md-8">
+                                    <%= data.location %>
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
+                            <div class="row col-md-6">
+                                <div class="show-label col-md-4"><h6>Country :</h6></div>
+                                <p class="card-text col-md-8">
+                                    <%= data.country %>
+                                </p>
+                            </div>
+                            <div class="row col-md-6">
+                                <div class="show-label col-md-4"><h6>Category :</h6></div>
+                                <p class="card-text col-md-8">
+                                    <%= data.category %>
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
 
                     </div>
                 </div>

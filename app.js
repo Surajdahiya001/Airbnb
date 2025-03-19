@@ -86,10 +86,6 @@ store.on(("error"), ()=>{
 })
 
 
-// app.get("/", (req, res) => {
-
-//     res.send("this is root");
-// })
 
 
 

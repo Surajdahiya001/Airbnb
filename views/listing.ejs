@@ -3,109 +3,122 @@
 
 <style>
 
-#filters{
+#filters {
 
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+display: flex;
+flex-wrap: wrap;
+align-items: center;
 }
-.filter{
+.all-filter{
 
-  text-align: center;
-  margin-top: 1.5rem;
-  margin-left: 2rem;
-  opacity: 0.8;
-}
-.filter p{
-  font-size: 0.8rem;
-}
-.filter:hover{
-
-  opacity: 1;
-  cursor: pointer;
+display: flex;
+/* flex-wrap: wrap; */
+/* align-items: center; */
 }
 
-.tax-info{
+.filter {
 
-  display: none;
+text-align: center; 
+margin-top: 1.5rem;
+margin-left: 2rem;
+opacity: 0.8;
 }
 
-.tax-toggle{
 
-  border: 1px solid #aaaaaa;
-  border-radius: 1rem;
-  height: 3rem;
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  margin-left: 5rem;
+.filter p {
+font-size: 0.8rem;
+}
+
+.filter:hover {
+
+opacity: 1;
+cursor: pointer;
+}
+
+.tax-info {
+
+display: none;
+}
+.overflow-x-scroll{
+overflow-x: auto !important;
+}
+
+.tax-toggle {
+
+border: 1px solid #aaaaaa;
+border-radius: 1rem;
+height: 3rem;
+display: flex;
+align-items: center;
+padding: 1rem;
+margin-left: 5rem;
 }
 
 </style>
 
   <body>
     <div id="filters">
+      <div class="all-filter overflow-x-scroll ">
+        <div class="filter" onclick="filterCategory('Trending')">
+          <div><i class="fa-solid fa-fire"></i></div>
+          <p>Trending</p>
+        </div>
 
-      <div class="filter">
-        <div><i class="fa-solid fa-fire"></i></div>
-        <p>Trending</p>
-      </div>
+        <div class="filter" onclick="filterCategory('Rooms')">
+          <div><i class="fa-solid fa-bed"></i></div>
+          <p>Rooms</p>
+        </div>
 
-      <div class="filter">
-        <div><i class="fa-solid fa-bed"></i></div>
-        <p>Rooms</p>
-      </div>
+        <div class="filter" onclick="filterCategory('City')">
+          <div><i class="fa-solid fa-city"></i></div>
+          <p>Iconic city</p>
+        </div>
 
-      <div class="filter">
-        <div><i class="fa-solid fa-city"></i></div>
-        <p>Iconic city</p>
-      </div>
+        <div class="filter" onclick="filterCategory('Mountain')">
+          <div><i class="fa-solid fa-mountain"></i></div>
+          <p>Mountain</p>
+        </div>
 
-      <div class="filter">
-        <div><i class="fa-solid fa-mountain"></i></div>
-        <p>Mountain</p>
-      </div>
+        <div class="filter" onclick="filterCategory('Castle')">
+          <div><i class="fa-brands fa-fort-awesome"></i></div>
+          <p>Castle</p>
+        </div>
 
-      <div class="filter">
-        <div><i class="fa-brands fa-fort-awesome"></i></div>
-        <p>Castle</p>
-      </div>
+        <div class="filter" onclick="filterCategory('Pools')">
+          <div><i class="fa-solid fa-person-swimming"></i></div>
+          <p>Amazing Pools</p>
+        </div>
 
-      <div class="filter">
-        <div><i class="fa-solid fa-person-swimming"></i></div>
-        <p>Amazing Pools</p>
-      </div>
+        <div class="filter" onclick="filterCategory('Camping')">
+          <div><i class="fa-solid fa-campground"></i></div>
+          <p>Camping</p>
+        </div>
 
-      <div class="filter">
-        <div><i class="fa-solid fa-campground"></i></div>
-        <p>Camping</p>
-      </div>
+        <div class="filter" onclick="filterCategory('Farms')">
+          <div><i class="fa-solid fa-cow"></i></div>
+          <p>Farms</p>
+        </div>
 
-      <div class="filter">
-        <div><i class="fa-solid fa-cow"></i></div>
-        <p>Farms</p>
-      </div>
+        <div class="filter" onclick="filterCategory('Arctic')">
+          <div><i class="fa-solid fa-snowflake"></i></div>
+          <p>Arctic</p>
+        </div>
 
-      <div class="filter">
-        <div><i class="fa-solid fa-snowflake"></i></div>
-        <p>Arctic</p>
-      </div>
+        <div class="filter" onclick="filterCategory('Boats')">
+          <div><i class="fa-solid fa-sailboat"></i></div>
+          <p>Boats</p>
+        </div>
 
-      <div class="filter">
-        <div><i class="fa-solid fa-sailboat"></i></div>
-        <p>Boats</p>
-      </div>
+        <div class="filter" onclick="filterCategory('Lakes')">
+          <div><i class="fa-solid fa-water"></i></div>
+          <p>Lakes</p>
+        </div>
+        <div class="filter" onclick="filterCategory('New')">
+          <div><i class="fa-solid fa-key"></i></div>
+          <p>New</p>
+        </div>
 
-      <div class="filter">
-        <div><i class="fa-solid fa-water"></i></div>
-        <p>Lakes</p>
       </div>
-      <div class="filter">
-        <div><i class="fa-solid fa-key"></i></div>
-        <p>New</p>
-      </div>
-      
-
       <div class="tax-toggle">
         <div class="form-check form-switch form-check-reverse">
           <input class="form-check-input" type="checkbox" id="flexSwitchCheckReverse">
@@ -128,9 +141,9 @@
               <p class="card-text">
                 <b>
                   <%= alldata.title %>
-                </b> <br>
-                &#8377;<%= alldata.price %>/ night 
-                <i class="tax-info"> &nbsp; &nbsp; +18% GST</i>
+                </b>
+              </b> <br> &#8377;<%= alldata.price %>/ night
+              <i class="tax-info" style="color: #007185;"><b>+ </b>&#8377;<%=alldata.price*18 /100 %> +18% GST</i>
 
               </p>
             </div>
@@ -165,4 +178,11 @@ for(info of taxinfo){
 }
 
     })
+
+    let filterCategory = (category) => {
+      // Redirect to the specified category
+      window.location.href = `/login/?category=${encodeURIComponent(
+        category
+      )}`;
+    };
   </SCript>

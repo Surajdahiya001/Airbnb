@@ -5,8 +5,54 @@ const Model = require("../models/listing.js");
 
 module.exports.index = async (req, res) => {
 
-    const alldatas = await Model.find({});
+    let search = req.query.search || "";
+  let category = req.query.category || "";
+  let alldatas = [];
+  if (category != "") {
+    alldatas = await Model.find({ category: `${category}` });
+  } else if (search !== "") {
+    // allListings = await Listing.find({ title: { $regex: `\\b${search}`, $options: 'i' } }).populate("owner");
+    // allListings = await Listing.find({
+    //     $or: [
+    //       { title: { $regex: `\\b${search}`, $options: 'i' } },
+    //       { location: { $regex: `\\b${search}`, $options: 'i' } },
+    //       { country: { $regex: `\\b${search}`, $options: 'i' } },
+    //       { 'owner.username': { $regex: `\\b${search}`, $options: 'i' } }
+    //     ]
+    //   }).populate("owner").populate("reviews");
+    alldatas = await Model.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "owner",
+          foreignField: "_id",
+          as: "result",
+        },
+      },
+      {
+        $match: {
+          $or: [
+            { title: { $regex: `\\b${search}`, $options: "i" } },
+            { location: { $regex: `\\b${search}`, $options: "i" } },
+            { country: { $regex: `\\b${search}`, $options: "i" } },
+            { "result.username": { $regex: `\\b${search}`, $options: "i" } },
+            { category: { $regex: `\\b${search}`, $options: "i" } },
+          ],
+        },
+      },
+    ]);
+    if (alldatas.length === 0) {
+      throw new ExpressErr(404, "No match found");
+    }
+  } else {
+    alldatas = await Model.find({});
+  }
+
+    // const alldatas = await Model.find({});
     res.render("listing.ejs", { alldatas });
+
+    // const alldatas = await Model.find({});
+    // res.render("listing.ejs", { alldatas });
 }
 
 // NEW ROUTE ---->
